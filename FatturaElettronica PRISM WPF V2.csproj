@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\cancel.png" />
+    <None Remove="Resources\cancel32.png" />
+    <None Remove="Resources\doc16.png" />
+    <None Remove="Resources\search.png" />
+    <None Remove="Resources\search32.png" />
+    <None Remove="Resources\user.png" />
+    <None Remove="Resources\userAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+    <PackageReference Include="FatturaElettronica" Version="3.4.14" />
+    <PackageReference Include="MathConverter" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
+    <PackageReference Include="Prism.Unity" Version="8.1.97" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cancel.png" />
+    <Resource Include="Resources\cancel32.png" />
+    <Resource Include="Resources\doc16.png" />
+    <Resource Include="Resources\search.png" />
+    <Resource Include="Resources\search32.png" />
+    <Resource Include="Resources\user.png" />
+    <Resource Include="Resources\userAll.png" />
+  </ItemGroup>
+</Project>

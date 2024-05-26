@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Prova_WPF_PRISM_UserControl_ExtendedFilterControl.Controls.ExtendedFilterControl"
+             x:Name="extFilterUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:controls="clr-namespace:Prova_WPF_PRISM_UserControl_ExtendedFilterControl.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" Width="260" Loaded="extFilterUserControl_Loaded">
+
+    <Grid ShowGridLines="False" Height="32" Width="260">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="36"/>
+            <ColumnDefinition Width="188"/>
+            <ColumnDefinition Width="36"/>
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="0" Source="../Resources/search32.png" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <!--Colore del bordo #97D7F5 come Assoinvoice-->
+        <Border Grid.Column="1" CornerRadius="16" BorderBrush="#97D7F5" BorderThickness="2" Background="White" >
+            <xctk:WatermarkTextBox x:Name="WatermarkedTextBox" VerticalAlignment="Center" Width="156"
+                          Watermark="{Binding WatermarkText, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Text="{Binding FilterText, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          Foreground="#FFB2B2B2" BorderBrush="Transparent" Background ="Transparent" BorderThickness="0"
+                          FontFamily="Artifact" FontStyle="Italic" FontSize="14" Focusable="True">
+                <xctk:WatermarkTextBox.WatermarkTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}"/>
+                    </DataTemplate>
+                </xctk:WatermarkTextBox.WatermarkTemplate>
+            </xctk:WatermarkTextBox>
+
+        </Border>
+
+        <Button Grid.Column="2" Width="36" Height="32" Background="White" BorderBrush="White" BorderThickness="0" Padding="0"
+                  Command="{Binding CancelFilterCommand, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
+                  CommandParameter="{Binding CancelFilterCommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
+                  IsEnabled="{Binding CancelFilterButtonIsEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                  <controls:AutoDisableImage Source="../Resources/cancel32.png" Stretch="None" />
+        </Button>
+
+
+
+
+    </Grid>
+
+</UserControl>
+
+
+<!--<controls:AutoDisableIconButton
+        Command="{Binding CancelFilterCommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
+        CommandParameter="{Binding CancelFilterCommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}"
+        Margin="2,2,2,2"
+        Background="Transparent"
+        BorderBrush="Transparent"
+        BorderThickness="0"
+        Padding="0"
+        Width="16" Height="16"
+        IsEnabled="{Binding CancelFilterButtonIsEnabled, RelativeSource={RelativeSource AncestorType=UserControl}, UpdateSourceTrigger=PropertyChanged}">
+</controls:AutoDisableIconButton>-->
+
+<!--<xctk:WatermarkTextBox.Watermark>
+    <StackPanel x:Name="WatermarkStackPanel" Orientation="Horizontal">
+        <Image Source="../Resources/doc16.png" Stretch="Fill" />
+        <Border BorderBrush="{x:Null}" Height="15">
+            <TextBlock x:Name="WatermarkTextBlock" Margin="4,0,0,0" VerticalAlignment="Center"
+                       FontFamily="Artifact" FontStyle="Italic" FontSize="12"
+                       Text="{Binding Watermark, ElementName=WatermarkedTextBox, UpdateSourceTrigger=PropertyChanged}"/>
+        </Border>
+    </StackPanel>
+</xctk:WatermarkTextBox.Watermark>-->

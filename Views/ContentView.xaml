@@ -1,0 +1,180 @@
+﻿<UserControl x:Class="FatturaElettronica_PRISM_WPF_V2.Views.ContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Controls="clr-namespace:Prova_WPF_PRISM_UserControl_ExtendedFilterControl.Controls"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:viewmodels="clr-namespace:FatturaElettronica_PRISM_WPF_V2.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:ContentViewModel}"
+             d:DesignHeight="400" d:DesignWidth="900">
+       <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FattureElettronicheTheme.xaml" />
+                <ResourceDictionary Source="/ScrollBarTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <!--Griglia Esterna   prima #FFCFE0FE"  ora #FFCEE3ED come Assoinvoice-->
+    <Grid ShowGridLines="True" Background="#FFCEE3ED" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--Griglia Esterna Riga 0 - Menu Region-->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Button Content="Aggiorna DB"  Style="{StaticResource StilePulsantiSelezioneViste}" Margin="50,0,0,0"
+                Command="{Binding AggiornaDBCommand}" />
+
+            <Button Content="Clienti" Style="{StaticResource StilePulsantiSelezioneViste}" Margin="100,0,0,0"
+                    Command="{Binding NavigateCommand}" CommandParameter="ClientiView"/>
+            <Button Content="Fornitori"  Style="{StaticResource StilePulsantiSelezioneViste}"
+                    Command="{Binding NavigateCommand}" CommandParameter="FornitoriView"/>
+            <Button Content="Fatture"  Style="{StaticResource StilePulsantiSelezioneViste}"
+                    Command="{Binding NavigateCommand}" CommandParameter="FattureView"/>
+            <Button Content="Dettagli"  Style="{StaticResource StilePulsantiSelezioneViste}"
+                    Command="{Binding NavigateCommand}" CommandParameter="DettagliFatturaView"/>
+
+            <Button Name="btnFirst" Content="|◄" Command="{Binding ApplicationCommands.MoveToFirstItemCommand}" Style="{StaticResource NavButton}" Margin="100,0,0,0" />
+            <Button Name="btnPrev"  Content="◄"  Command="{Binding ApplicationCommands.MoveToPreviousItemCommand}" Style="{StaticResource NavButton}"/>
+            <Button Name="btnNext"  Content="►"  Command="{Binding ApplicationCommands.MoveToNextItemCommand}" Style="{StaticResource NavButton}"/>
+            <Button Name="btnLast"  Content="►|" Command="{Binding ApplicationCommands.MoveToLastItemCommand}" Style="{StaticResource NavButton}"/>
+
+            <Button Content="Esci" Style="{StaticResource StilePulsantiSelezioneViste}" Margin="100,0,0,0" Command="{Binding ExitCommand}" />
+        </StackPanel>
+
+
+        <!--Griglia Esterna Riga 1 - Griglia Main Region-->
+        <Grid x:Name="OuterGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="290"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Griglia Main region - Colonna 0 - Regione dei Filtri-->
+            <Border Grid.Column="0" CornerRadius="10" BorderBrush="White"
+                    BorderThickness="1" Background="White" Margin="5,5,5,5">
+                <Grid x:Name="grigliaFiltri" >
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <!--Filtro FRORNITORI-->
+                    <Grid x:Name="grigliaFiltroSuperiore" Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Controls:ExtendedFilterControl Grid.Row="0" x:Name="extTBFORNITORE"
+                                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Width ="260" 
+                                WatermarkText="{Binding WatermarkTextFornitore}"
+                                FilterText="{Binding FilterTextFornitore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                CancelFilterButtonIsEnabled = "{Binding CanRemoveFiltroFornitore, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                CancelFilterCommand="{Binding RimuoviFiltroCommand}"
+                                CancelFilterCommandParameter="FORNITORE">
+                        </Controls:ExtendedFilterControl>
+
+                        <ScrollViewer Style="{StaticResource FatturaElettronicaScrollViewerTheme}" Grid.Row="1"
+                                      HorizontalScrollBarVisibility = "Visible" VerticalScrollBarVisibility = "Visible" Margin="0,5,0,10">
+                            <ListBox x:Name="fornitoriListBox" Margin="10,0,0,0"
+                                    AlternationCount="2"
+                                    HorizontalAlignment="Center"
+                                    BorderBrush="Transparent"
+                                    ItemsSource="{Binding ElencoFornitoriVS.View}" 
+                                    IsSynchronizedWithCurrentItem="True"
+                                    SelectedItem="{Binding SoggettoFiltroSelezionato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemContainerStyle="{StaticResource FatturaElettronicaTheme}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                    d:ItemsSource="{d:SampleData ItemCount=5}">
+                            </ListBox>
+                           
+                        </ScrollViewer>
+                    </Grid>
+
+                    <!--Filtro CLIENTI -->
+                    <Grid x:Name="grigliaFiltroInferiore" Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Controls:ExtendedFilterControl Grid.Row="0" x:Name="extTBCLIENTE"
+                                 HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Width="260"
+                                 WatermarkText="{Binding WatermarkTextCliente}"
+                                 FilterText="{Binding FilterTextCliente, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 CancelFilterButtonIsEnabled = "{Binding CanRemoveFiltroCliente, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 CancelFilterCommand="{Binding RimuoviFiltroCommand}"
+                                 CancelFilterCommandParameter="CLIENTE">
+                        </Controls:ExtendedFilterControl>
+
+                        <ScrollViewer Style="{StaticResource FatturaElettronicaScrollViewerTheme}" Grid.Row="1"
+                            HorizontalScrollBarVisibility = "Visible" VerticalScrollBarVisibility = "Visible" Margin="0,5,0,10">
+                            <ListBox x:Name="clientiListBox" Margin="10,0,0,0"
+                                    AlternationCount="2"
+                                    HorizontalAlignment="Center"
+                                    BorderBrush="Transparent"
+                                    ItemsSource="{Binding ElencoClientiVS.View}" 
+                                    IsSynchronizedWithCurrentItem="True"
+                                    SelectedItem="{Binding SoggettoFiltroSelezionato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    ItemContainerStyle="{StaticResource FatturaElettronicaTheme}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    d:ItemsSource="{d:SampleData ItemCount=5}">
+                            </ListBox>
+                           
+                        </ScrollViewer>
+
+                    </Grid>
+                </Grid>
+            </Border>
+        
+             <!--Griglia Main region - Colonna 1 - Regione della Datagrid-->
+            <Border Grid.Column="1" CornerRadius="10" BorderBrush="White"
+                    BorderThickness="1" Background="White" Margin="5,5,5,5">
+                <DataGrid x:Name="fattureDataGrid1"  Margin="5,5,5,5" HorizontalAlignment="Stretch"   
+                      IsReadOnly="True" CanUserAddRows="False" SelectionUnit="FullRow" SelectionMode="Single" CanUserReorderColumns="False"
+                      AutoGenerateColumns="False" EnableRowVirtualization="True" GridLinesVisibility="Vertical" HeadersVisibility="All"
+                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                      Background="White" RowBackground="White" AlternatingRowBackground="#FFCFE0FE" BorderBrush="Transparent" BorderThickness="3"
+                      ColumnHeaderStyle="{StaticResource CenteredBoldStyle}" FontSize="14"
+                      ItemsSource="{Binding ElencoFattureVS.View}" 
+                      RowStyle="{StaticResource SelectedDataGridRowStyle}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=IdFattura}" Header="ID" Width="SizeToCells"/>
+                        <DataGridTextColumn Binding="{Binding Path=Tipo}" Header="Tipo" Width="Auto"/>
+                        <DataGridTextColumn Binding="{Binding Path=NomeFile}" Header="File" Width="Auto"/>
+                        <DataGridTextColumn Binding="{Binding Path=IdFornitoreNavigation.Denominazione}" Header="Fornitore" Width="SizeToCells"/>
+                        <DataGridTextColumn Binding="{Binding Path=IdClienteNavigation.Denominazione}" Header="Cliente" Width="SizeToCells"/>
+                        <DataGridTextColumn Binding="{Binding Path=Imponibile, StringFormat=C2}" Header="Imponibile" Width="Auto" ElementStyle="{StaticResource RightAlignedCurrencyValueStyle}"/>
+                        <DataGridTextColumn Binding="{Binding Path=Imposta, StringFormat=C2}" Header="IVA" Width="Auto" ElementStyle="{StaticResource RightAlignedCurrencyValueStyle}"/>
+                        <DataGridTextColumn Binding="{Binding Path=Importo, StringFormat=C2}" Header="Totale" Width="Auto" ElementStyle="{StaticResource RightAlignedCurrencyValueStyle}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+            <GridSplitter Grid.Column ="2"
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Stretch"
+                        Panel.ZIndex="1" Background="Transparent"
+                        ShowsPreview="true"
+                        Width="5"/>
+
+            <!--Griglia Main region - Colonna 2 - Regione della Fattura-->
+            <Border Grid.Column="2" CornerRadius="10" BorderBrush="White"
+                    BorderThickness="1" Background="White" Margin="5,5,5,5">
+                <StackPanel  Width="200">
+                    <TextBlock Text="Fattura"/>
+                    
+                    </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

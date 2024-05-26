@@ -1,0 +1,16 @@
+﻿<Button x:Class="Prova_WPF_PRISM_UserControl_ExtendedFilterControl.Controls.AutoDisableIconButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Prova_WPF_PRISM_UserControl_ExtendedFilterControl.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="20"
+             Command="{Binding CancelFilterCommand, RelativeSource={RelativeSource AncestorType=UserControl, AncestorLevel=1}}">
+        <local:AutoDisableImage Source="../Resources/cancel.png" Stretch="None" HorizontalAlignment="Center"/>
+ </Button>
+
+    <!--<Button Command="{Binding CancelFilterCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <local:AutoDisableImage Source="../Resources/cancel.png" Stretch="None" HorizontalAlignment="Center"/>
+    </Button>-->
+
