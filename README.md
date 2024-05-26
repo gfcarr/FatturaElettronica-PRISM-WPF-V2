@@ -1,0 +1,1 @@
+# FatturaElettronica PRISM WPF V2
