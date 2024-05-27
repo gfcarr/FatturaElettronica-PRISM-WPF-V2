@@ -167,8 +167,8 @@
                       RowStyle="{StaticResource SelectedDataGridRowStyle}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Path=IdFattura}" Header="ID" Width="SizeToCells"/>
-                        <DataGridTextColumn Binding="{Binding Path=Tipo}" Header="Tipo" Width="Auto"/>
-                        <DataGridTextColumn Binding="{Binding Path=NomeFile}" Header="File" Width="Auto"/>
+                        <!--<DataGridTextColumn Binding="{Binding Path=Tipo}" Header="Tipo" Width="Auto"/>
+                        <DataGridTextColumn Binding="{Binding Path=NomeFile}" Header="File" Width="Auto"/>-->
                         <DataGridTextColumn Binding="{Binding Path=IdFornitoreNavigation.Denominazione}" Header="Fornitore" Width="SizeToCells"/>
                         <DataGridTextColumn Binding="{Binding Path=IdClienteNavigation.Denominazione}" Header="Cliente" Width="SizeToCells"/>
                         <DataGridTextColumn Binding="{Binding Path=Imponibile, StringFormat=C2}" Header="Imponibile" Width="Auto" ElementStyle="{StaticResource RightAlignedCurrencyValueStyle}"/>
