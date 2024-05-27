@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=viewmodels:ContentViewModel}"
              d:DesignHeight="400" d:DesignWidth="900">
-       <UserControl.Resources>
+    <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/FattureElettronicheTheme.xaml" />
@@ -27,27 +27,53 @@
         </Grid.RowDefinitions>
 
         <!--Griglia Esterna Riga 0 - Menu Region-->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Button Content="Aggiorna DB"  Style="{StaticResource StilePulsantiSelezioneViste}" Margin="50,0,0,0"
-                Command="{Binding AggiornaDBCommand}" />
+        <Grid Grid.Row="0" ShowGridLines="True" Height="75" VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="290"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <!-- StackPanel per i pulasnti-->
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Bottom" Height="75">
+                <Button Content="Aggiorna DB"  Style="{StaticResource StilePulsantiSelezioneViste}" Margin="10,0,0,0"
+                        Command="{Binding AggiornaDBCommand}" />
 
-            <Button Content="Clienti" Style="{StaticResource StilePulsantiSelezioneViste}" Margin="100,0,0,0"
-                    Command="{Binding NavigateCommand}" CommandParameter="ClientiView"/>
-            <Button Content="Fornitori"  Style="{StaticResource StilePulsantiSelezioneViste}"
-                    Command="{Binding NavigateCommand}" CommandParameter="FornitoriView"/>
-            <Button Content="Fatture"  Style="{StaticResource StilePulsantiSelezioneViste}"
-                    Command="{Binding NavigateCommand}" CommandParameter="FattureView"/>
-            <Button Content="Dettagli"  Style="{StaticResource StilePulsantiSelezioneViste}"
-                    Command="{Binding NavigateCommand}" CommandParameter="DettagliFatturaView"/>
+                <!--<Button Content="Clienti" Style="{StaticResource StilePulsantiSelezioneViste}" Margin="100,0,0,0"
+                            Command="{Binding NavigateCommand}" CommandParameter="ClientiView"/>
+                    <Button Content="Fornitori"  Style="{StaticResource StilePulsantiSelezioneViste}"
+                            Command="{Binding NavigateCommand}" CommandParameter="FornitoriView"/>
+                    <Button Content="Fatture"  Style="{StaticResource StilePulsantiSelezioneViste}"
+                            Command="{Binding NavigateCommand}" CommandParameter="FattureView"/>
+                    <Button Content="Dettagli"  Style="{StaticResource StilePulsantiSelezioneViste}"
+                            Command="{Binding NavigateCommand}" CommandParameter="DettagliFatturaView"/>
 
-            <Button Name="btnFirst" Content="|◄" Command="{Binding ApplicationCommands.MoveToFirstItemCommand}" Style="{StaticResource NavButton}" Margin="100,0,0,0" />
-            <Button Name="btnPrev"  Content="◄"  Command="{Binding ApplicationCommands.MoveToPreviousItemCommand}" Style="{StaticResource NavButton}"/>
-            <Button Name="btnNext"  Content="►"  Command="{Binding ApplicationCommands.MoveToNextItemCommand}" Style="{StaticResource NavButton}"/>
-            <Button Name="btnLast"  Content="►|" Command="{Binding ApplicationCommands.MoveToLastItemCommand}" Style="{StaticResource NavButton}"/>
+                    <Button Name="btnFirst" Content="|◄" Command="{Binding ApplicationCommands.MoveToFirstItemCommand}" Style="{StaticResource NavButton}" Margin="100,0,0,0" />
+                    <Button Name="btnPrev"  Content="◄"  Command="{Binding ApplicationCommands.MoveToPreviousItemCommand}" Style="{StaticResource NavButton}"/>
+                    <Button Name="btnNext"  Content="►"  Command="{Binding ApplicationCommands.MoveToNextItemCommand}" Style="{StaticResource NavButton}"/>
+                    <Button Name="btnLast"  Content="►|" Command="{Binding ApplicationCommands.MoveToLastItemCommand}" Style="{StaticResource NavButton}"/>-->
 
-            <Button Content="Esci" Style="{StaticResource StilePulsantiSelezioneViste}" Margin="100,0,0,0" Command="{Binding ExitCommand}" />
-        </StackPanel>
+                <Button Content="Esci" Style="{StaticResource StilePulsantiSelezioneViste}" Margin="20,0,0,0" Command="{Binding ExitCommand}" />
+            </StackPanel>
 
+            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <!-- ListBox ORIZZONTALE PER GLI ANNI-->
+                <ListBox Name="listBoxAnni" Style="{StaticResource HorizontalListBoxStyle}"
+                         ItemsSource="{Binding ElencoAnniVS.View}"
+                         SelectedItem="{Binding AnnoSelezionato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         ItemContainerStyle="{StaticResource FiltriOrizzontaliListBoxItemsTheme}"
+                         d:ItemsSource="{d:SampleData ItemCount=4}" >
+                </ListBox>
+
+                <!-- ListBox ORIZZONTALE PER I MESI-->
+                <ListBox Name="listBoxMesi" Style="{StaticResource HorizontalListBoxStyle}"
+                         ItemsSource="{Binding ElencoMesiVS.View}"
+                         SelectedItem="{Binding MeseSelezionato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         ItemContainerStyle="{StaticResource FiltriOrizzontaliListBoxItemsTheme}"
+                         d:ItemsSource="{d:SampleData ItemCount=4}">
+                </ListBox>
+            </StackPanel>
+
+
+        </Grid>
 
         <!--Griglia Esterna Riga 1 - Griglia Main Region-->
         <Grid x:Name="OuterGrid" Grid.Row="1">
@@ -61,7 +87,7 @@
             <Border Grid.Column="0" CornerRadius="10" BorderBrush="White"
                     BorderThickness="1" Background="White" Margin="5,5,5,5">
                 <Grid x:Name="grigliaFiltri" >
-                    
+
                     <Grid.RowDefinitions>
                         <RowDefinition />
                         <RowDefinition />
@@ -85,19 +111,14 @@
 
                         <ScrollViewer Style="{StaticResource FatturaElettronicaScrollViewerTheme}" Grid.Row="1"
                                       HorizontalScrollBarVisibility = "Visible" VerticalScrollBarVisibility = "Visible" Margin="0,5,0,10">
-                            <ListBox x:Name="fornitoriListBox" Margin="10,0,0,0"
-                                    AlternationCount="2"
-                                    HorizontalAlignment="Center"
-                                    BorderBrush="Transparent"
+                            <ListBox x:Name="fornitoriListBox" Style="{StaticResource FiltriVerticaliListBoxTheme}"
                                     ItemsSource="{Binding ElencoFornitoriVS.View}" 
                                     IsSynchronizedWithCurrentItem="True"
                                     SelectedItem="{Binding SoggettoFiltroSelezionato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    ItemContainerStyle="{StaticResource FatturaElettronicaTheme}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                    ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                    ItemContainerStyle="{StaticResource FiltriVerticaliTheme}"
                                     d:ItemsSource="{d:SampleData ItemCount=5}">
                             </ListBox>
-                           
+
                         </ScrollViewer>
                     </Grid>
 
@@ -119,25 +140,21 @@
 
                         <ScrollViewer Style="{StaticResource FatturaElettronicaScrollViewerTheme}" Grid.Row="1"
                             HorizontalScrollBarVisibility = "Visible" VerticalScrollBarVisibility = "Visible" Margin="0,5,0,10">
-                            <ListBox x:Name="clientiListBox" Margin="10,0,0,0"
-                                    AlternationCount="2"
-                                    HorizontalAlignment="Center"
-                                    BorderBrush="Transparent"
+                            <ListBox x:Name="clientiListBox" Style="{StaticResource FiltriVerticaliListBoxTheme}"
                                     ItemsSource="{Binding ElencoClientiVS.View}" 
                                     IsSynchronizedWithCurrentItem="True"
                                     SelectedItem="{Binding SoggettoFiltroSelezionato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    ItemContainerStyle="{StaticResource FatturaElettronicaTheme}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                    ItemContainerStyle="{StaticResource FiltriVerticaliTheme}"
                                     d:ItemsSource="{d:SampleData ItemCount=5}">
                             </ListBox>
-                           
+
                         </ScrollViewer>
 
                     </Grid>
                 </Grid>
             </Border>
-        
-             <!--Griglia Main region - Colonna 1 - Regione della Datagrid-->
+
+            <!--Griglia Main region - Colonna 1 - Regione della Datagrid-->
             <Border Grid.Column="1" CornerRadius="10" BorderBrush="White"
                     BorderThickness="1" Background="White" Margin="5,5,5,5">
                 <DataGrid x:Name="fattureDataGrid1"  Margin="5,5,5,5" HorizontalAlignment="Stretch"   
@@ -172,8 +189,8 @@
                     BorderThickness="1" Background="White" Margin="5,5,5,5">
                 <StackPanel  Width="200">
                     <TextBlock Text="Fattura"/>
-                    
-                    </StackPanel>
+
+                </StackPanel>
             </Border>
         </Grid>
     </Grid>

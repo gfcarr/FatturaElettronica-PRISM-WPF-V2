@@ -21,4 +21,8 @@ public partial class ContentView : UserControl
 
     }
 
+    private void listBoxAnni_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
+    }
 }

@@ -11,7 +11,7 @@
     </AlternationConverter>
 
     <!--Tema per i ListBoxItem dei Filtri di Ricerca delle Fatture Elettroniche-->
-    <Style x:Key="FatturaElettronicaTheme" TargetType="{x:Type ListBoxItem}">
+    <Style x:Key="FiltriVerticaliTheme" TargetType="{x:Type ListBoxItem}">
         <!--Impostazioni Generali-->
         <Setter Property="SnapsToDevicePixels" Value="true"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -105,7 +105,7 @@
                          - se non è abilitato il testo diventa azzurro chiaro
                     -->
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="true">
+                        <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="OuterBorder" Property="Background" Value="#FF2EAFEB"/>
                             <Setter Property="Foreground" Value="White"/>
                         </Trigger>
@@ -123,6 +123,70 @@
         <Setter Property="Background"
                 Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource BackgroundConverter}}"/>
     </Style>
+
+
+
+    <Style x:Key="FiltriVerticaliListBoxTheme" TargetType="{x:Type ListBox}">
+        <Setter Property="AlternationCount" Value="2"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+    </Style>
+
+    <Style x:Key="FiltriOrizzontaliListBoxItemsTheme" TargetType="ListBoxItem">
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border Name="itemBorder" CornerRadius="12" BorderBrush="Transparent">
+                        <TextBlock Name="itemTB" Text="{Binding}" Padding="10,0,10,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="Blue"/>
+                            <Setter TargetName="itemBorder" Property="Background" Value="White"/>
+                            <Setter Property="FontWeight" Value="DemiBold"/>
+                            <Setter Property="FontStyle" Value="Italic"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontWeight" Value="DemiBold"/>
+                            <Setter Property="FontStyle" Value="Italic"/>
+                            <Setter TargetName="itemTB" Property="TextDecorations" Value="Underline"/>
+                            <Setter TargetName="itemBorder" Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers> 
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="HorizontalListBoxStyle" TargetType="ListBox">
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Margin" Value="0,10,0,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
 
 </ResourceDictionary>
 

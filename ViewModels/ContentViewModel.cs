@@ -27,12 +27,14 @@ public class ContentViewModel : BindableBase
     private ISharedDataStore _sharedData;
     private DbFattureContext _dbcontext;
         
-    private ObservableCollection<string> elencoProvinceOC;
-    private ObservableCollection<string> elencoComuniOC;
+   
     private ObservableCollection<Fattura> elencoFattureOC;
     private ObservableCollection<SoggettoFiltro> elencoClientiOC;
     private ObservableCollection<SoggettoFiltro> elencoFornitoriOC;
-
+    private ObservableCollection<string> elencoProvinceOC;
+    private ObservableCollection<string> elencoComuniOC;
+    private ObservableCollection<string> elencoAnniOC;
+    private ObservableCollection<string> elencoMesiOC;
 
     // COMANDI
     public DelegateCommand AggiornaDBCommand { get; private set; }
@@ -107,6 +109,21 @@ public class ContentViewModel : BindableBase
         get => _elencoFattureVS;
         set => SetProperty(ref _elencoFattureVS, value);
     }
+    // Proprietà
+    private CollectionViewSource _elencoAnniVS;
+    public CollectionViewSource ElencoAnniVS
+    {
+        get => _elencoAnniVS;
+        set => SetProperty(ref _elencoAnniVS, value);
+    }
+    // Proprietà
+    private CollectionViewSource _elencoMesiVS;
+    public CollectionViewSource ElencoMesiVS
+    {
+        get => _elencoMesiVS;
+        set => SetProperty(ref _elencoMesiVS, value);
+    }
+
     //******************************************************************
     //
     // ELEMENTI SELEZIONATI - SelectedItem delle ListBox di Selezione Filtri
@@ -208,6 +225,36 @@ public class ContentViewModel : BindableBase
             SetProperty(ref _comuneSelezionato, value);
             var test = string.IsNullOrEmpty(_comuneSelezionato) || _comuneSelezionato == elencoComuniOC.First();
             ApplicaFiltro(test ? FilterField.NoComune : FilterField.Comune);
+        }
+    }
+    // Proprietà:
+    private string _annoSelezionato;
+    public string AnnoSelezionato
+    {
+        get => _annoSelezionato;
+        set
+        {
+            SetProperty(ref _annoSelezionato, value);
+            if (_annoSelezionato != null)
+            {
+                var test = string.IsNullOrEmpty(_annoSelezionato) || _annoSelezionato == elencoAnniOC.First();
+                ApplicaFiltro(test ? FilterField.NoAnno : FilterField.Anno);
+            }
+        }
+    }
+    // Proprietà:
+    private string _meseSelezionato;
+    public string MeseSelezionato
+    {
+        get => _meseSelezionato;
+        set
+        {
+            SetProperty(ref _meseSelezionato, value);
+           
+            
+                var test = string.IsNullOrEmpty(_meseSelezionato) || _meseSelezionato == elencoMesiOC.First();
+                ApplicaFiltro(test ? FilterField.NoMese : FilterField.Mese);
+            
         }
     }
     //*********************************************************
@@ -345,6 +392,20 @@ public class ContentViewModel : BindableBase
         FilterTextFornitore = null;
         _elencoFornitoriVS.View.Filter = ApplicaFiltroElencoFornitori;
 
+        // imposta ambiente per il filtro Anni delle Fatture
+        elencoAnniOC = elencoFattureOC.Select(f => f.Anno).Distinct().OrderBy(a => a).ToObservableCollection();
+        elencoAnniOC.Insert(0, "TUTTI GLI ANNI");
+        _elencoAnniVS = new() { Source = elencoAnniOC };
+        _annoSelezionato = "";
+
+        // imposta ambiente per il filtro Mesi delle Fatture
+        elencoMesiOC = new() {"TUTTI I MESI", "GENNAIO", "FEBBRAIO", "MARZO", "APRILE", "MAGGIO", "GIUGNO", "LUGLIO",
+                                              "AGOSTO", "SETTEMBRE", "OTTOBRE", "NOVEMBRE", "DICEMBRE" };
+       
+        _elencoMesiVS = new() { Source = elencoMesiOC };
+        _meseSelezionato = "";
+
+
         //// imposta ambiente per la Provincia
         //elencoProvinceOC = elencoClientiOC.Select(c => c.Provincia).Distinct().OrderBy(x => x).ToObservableCollection();
         //elencoProvinceOC.Insert(0, " * Tutte le Province * ");
@@ -372,7 +433,6 @@ public class ContentViewModel : BindableBase
         AggiornaDBCommand = new DelegateCommand(AggiornaDB);
         ExitCommand = new DelegateCommand(Exit);
     }
-
 
     public void RimuoviFiltroElenco(string nomeDelFiltro)
     {
@@ -497,6 +557,17 @@ public class ContentViewModel : BindableBase
                 _elencoFattureVS.Filter += new FilterEventHandler(FiltraPerComune);
             }
         }
+        if (nomeFiltro.Contains("ANNO"))
+        {
+            _elencoFattureVS.Filter -= new FilterEventHandler(FiltraPerAnno);
+            _elencoFattureVS.Filter += new FilterEventHandler(FiltraPerAnno);
+            
+        }
+        if (nomeFiltro.Contains("MESE"))
+        {
+           _elencoFattureVS.Filter -= new FilterEventHandler(FiltraPerMese);
+           _elencoFattureVS.Filter += new FilterEventHandler(FiltraPerMese);
+        }
     }
     private void RimuoviFiltroView(FilterField field)
     {
@@ -520,6 +591,16 @@ public class ContentViewModel : BindableBase
         if (nomeFiltro.Contains("COMUNE"))
         {
             _elencoFattureVS.Filter -= new FilterEventHandler(FiltraPerComune);
+            //MoveToFirst();
+        }
+        if (nomeFiltro.Contains("ANNO"))
+        {
+            _elencoFattureVS.Filter -= new FilterEventHandler(FiltraPerAnno);
+            //MoveToFirst();
+        }
+        if (nomeFiltro.Contains("MESE"))
+        {
+            _elencoFattureVS.Filter -= new FilterEventHandler(FiltraPerMese);
             //MoveToFirst();
         }
     }
@@ -574,6 +655,36 @@ public class ContentViewModel : BindableBase
         if (((Cliente)e.Item).Comune is string src)
         {
             if (string.Compare(_comuneSelezionato, src) != 0)
+            {
+                e.Accepted = false;
+            }
+        }
+        else
+        {
+            e.Accepted = false;
+        }
+    }
+    private void FiltraPerAnno(object sender, FilterEventArgs e)
+    {
+        // see Notes on Filter Methods:
+        if (((Fattura)e.Item).Anno is string src)
+        {
+            if (string.Compare(_annoSelezionato, src) != 0)
+            {
+                e.Accepted = false;
+            }
+        }
+        else
+        {
+            e.Accepted = false;
+        }
+    }
+    private void FiltraPerMese(object sender, FilterEventArgs e)
+    {
+        // see Notes on Filter Methods:
+        if (((Fattura)e.Item).Mese is string src)
+        {
+            if (string.Compare(elencoMesiOC.IndexOf(_meseSelezionato).ToString().PadLeft(2,'0'), src) != 0)
             {
                 e.Accepted = false;
             }
